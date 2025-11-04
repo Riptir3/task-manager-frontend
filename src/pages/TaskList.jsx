@@ -6,15 +6,11 @@ import { useNavigate } from "react-router-dom";
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { user, logout } = useContext(UserContext);
+  const { logout } = useContext(UserContext);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
     const controller = new AbortController(); 
     const fetchTasks = async () => {
       try {
@@ -41,27 +37,87 @@ const TaskList = () => {
     return () => {
       controller.abort();
     };
-  }, [user, logout, navigate]);
+  }, [ logout, navigate]);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
+    const handleAddTask = () => {
+    navigate("/add-task");
+  };
+
+    const handleEditTask = (id) => {
+    navigate(`/edit-task/${id}`);
+  };
+
+  const handleDeleteTask = async (id) =>{
+    if (!window.confirm("Are you sure you want to delete this task?")) return;
+
+    try {
+
+      await api.delete(`/Tasks/${id}`);
+      setTasks(tasks.filter((t)=> t.id !== id));
+      setMessage("Task deleted succesfully.");
+      setTimeout(()=> setMessage(""),3000);
+
+    } catch (error) {
+      console.error("Failed to delete task: ",error);
+      setError("Failed to delete task.")
+      setTimeout(() => setError(""), 3000);
+    }
+  }
+
+    const handleToggleComplete = async (task) => {
+    try {
+      const updatedTask = { ...task, isCompleted: !task.isCompleted };
+      await api.put(`/Tasks/${task.id}`, updatedTask);
+
+      setTasks(
+        tasks.map((t) => (t.id === task.id ? updatedTask : t))
+      );
+
+      setMessage(
+        updatedTask.isCompleted
+          ? "Task marked as completed ✅"
+          : "Task marked as pending ⏳"
+      );
+      setTimeout(() => setMessage(""), 3000);
+    } catch (err) {
+      console.error("Failed to update task:", err);
+      setError("Failed to update task");
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Your Tasks</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
-        >
-          Logout
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleAddTask}
+            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition"
+          >
+            + Add Task
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
+      {message && (
+        <div className="bg-green-600 p-2 rounded mb-4 text-center">
+          {message}
+        </div>
+      )}
       {error && (
-        <div className="bg-red-500 p-2 rounded mb-4 text-center">{error}</div>
+        <div className="bg-red-600 p-2 rounded mb-4 text-center">{error}</div>
       )}
 
       {tasks.length === 0 ? (
@@ -80,14 +136,33 @@ const TaskList = () => {
                   Due: {new Date(task.dueDate).toLocaleDateString()}
                 </p>
               </div>
-              <div>
-                {task.isCompleted ? (
-                  <span className="text-green-400 font-semibold">Done ✅</span>
-                ) : (
-                  <span className="text-yellow-400 font-semibold">
-                    Pending ⏳
-                  </span>
-                )}
+
+              <div className="flex flex-col items-end gap-2">
+                <button
+                  onClick={() => handleToggleComplete(task)}
+                  className={`font-semibold transition ${
+                    task.isCompleted
+                      ? "text-green-400 hover:text-green-300"
+                      : "text-yellow-400 hover:text-yellow-300"
+                  }`}
+                >
+                  {task.isCompleted ? "Done ✅" : "Pending ⏳"}
+                </button>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEditTask(task.id)}
+                    className="bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 transition text-sm"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteTask(task.id)}
+                    className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}
