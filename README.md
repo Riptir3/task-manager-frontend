@@ -37,7 +37,6 @@ A cél egy modern, biztonságos kliens alkalmazás létrehozása, amelyet egy As
 
 ```
 task-manager-frontend/
-│
 ├── src/components/
 │ ├── ProtectedRoute.jsx -> Bejelentkezéshez kötött Routeok ellenőrzése. (Feladatok kezelése)
 │ └── PublicRoute.jsx -> Bejelentkezéshez nem kötött Routeok ellenőrzése. (Bejelentkezés, Regisztráció)
