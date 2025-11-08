@@ -1,70 +1,131 @@
-# Getting Started with Create React App
+# 🧠 Task Manager Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Egy **React + Tailwind** alapú alkalmazás, amely felhasználói feladatok kezelésére szolgál, felhasználói regisztrációval, bejelentkezéssel és JWT-alapú authentikációval.  
+A cél egy modern, biztonságos kliens alkalmazás létrehozása, amelyet egy Asp.net Web Api backend használ.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Funkciók
 
-### `npm start`
+- 👤 **Felhasználókezelés**
+  - Regisztráció
+  - Bejelentkezés (JWT tokennel)
+  - Token alapú authentikáció
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- ✅ **Feladatkezelés (Task CRUD)**
+  - Lekérdezés
+  - Létrehozás    
+  - Módosítás  
+  - Törlés  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 🔍 **Szűrés, keresés és rendezés** a feladatok között  
+- ⚙️ **Egységes hibakezelés**
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧰 Felhasznált technológiák
 
-### `npm run build`
+- **React**
+- **Tailwind**
+- **Axios**
+- **JWT (JSON Web Token)**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🗂️ Projekt szerkezete
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+task-manager-frontend/
+│
+├── src/components/
+│ ├── ProtectedRoute.jsx -> Bejelentkezéshez kötött Routeok ellenőrzése. (Feladatok kezelése)
+│ └── PublicRoute.jsx -> Bejelentkezéshez nem kötött Routeok ellenőrzése. (Bejelentkezés, Regisztráció)
+│
+├── src/contexts/
+│ ├── UserContext.js -> Globális állapot létrehozása és hozzáférésének biztosítása. Token kezelése.
+│
+├── src/pages/
+│ ├── Login.jsx -> Bejelentkezés oldala.
+│ ├── Register.jsx -> Regisztráció oldala.
+│ ├── TaskEdit.jsx -> Kiválasztott feladat modósítása.
+│ ├── TaskForm.jsx -> Új feladat létrehozása.
+│ └── TaskList.jsx -> Főoldal, tartalmazza a felhasználóhoz rendelt feladatokat.
+│
+├── src/services/
+│ ├── api.js -> Globálisan beállítja a bejelentkezés utáni tokent a request headerjébe. Hiba kezelés.
+│ └── authService.js -> Bejelentkezéshez és regisztrációhoz tartozó api-ok.
+│
+├── src/App.js -> Routeok létrehozása.
+|
+├──src/index.js -> UserProvider hozzáadása az App komponenshez.
 
-### `npm run eject`
+```
+## 🧪 API végpontok
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+🔹 Felhasználók
+| HTTP metódus | Útvonal                   | Leírás                           |
+| ------------ | ------------------------- | -------------------------------- |
+| `POST`       | `/api/Users/register` | Új felhasználó regisztrálása     |
+| `POST`       | `/api/Users/login`        | Bejelentkezés és token generálás |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+🔹 Feladatok (autentikáció szükséges)
+| HTTP metódus | Útvonal           | Leírás                         |
+| ------------ | ----------------- | ------------------------------ |
+| `GET`        | `/api/Tasks`      | Összes feladat lekérdezése     |
+| `GET`        | `/api/Tasks/{id}` | Feladat lekérdezése ID alapján |
+| `POST`       | `/api/Tasks`      | Új feladat létrehozása         |
+| `PUT`        | `/api/Tasks/{id}` | Feladat módosítása             |
+| `DELETE`     | `/api/Tasks/{id}` | Feladat törlése                |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🔑 JWT hitelesítés
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+A bejelentkezés után a szerver visszaad egy JWT tokent, amelyet a kliens minden kérésnél a headerben küld el:
+``` makefile
+Authorization: Bearer <token>
+```
+### Példa:
+``` http
+GET /api/Tasks HTTP/1.1
+Host: localhost:7242
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+A token lejárata után a kliens újra bejelentkezésre kényszerül.
 
-## Learn More
+## 🌍 Backend integráció
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+A frontendhez készült ASP.net Web Api alapú backend is:
+👉[Task Manager Backend](https://github.com/Riptir3/TaskManager.Api). 
+A két alkalmazás Axios-on keresztül kommunikál, a `https://localhost:7242/api/...` végpontokat használva.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ⚙️ Telepítés és futtatás
 
-### Code Splitting
+### 1️⃣ Klónozd a repót
+```bash
+git clone https://github.com/Riptir3/TaskManager.Api.git
+cd TaskManager.API
+```
+### 2️⃣ Telepítsd a függőségeket
+```bash
+dotnet build
+```
+### 3️⃣ Adatbázis létrehozása
+```bash
+dotnet ef database update
+```
+### 4️⃣ Futtatás
+```bash
+dotnet run
+```
+### A backend elérhető lesz itt:
+```arduino
+https://localhost:7242
+```
+### Swagger UI:
+```bash
+https://localhost:7242/swagger
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Kapcsolat
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Fejlesztő: **Riptir3 (Bence)**  
+GitHub: [github.com/Riptir3](https://github.com/Riptir3)
