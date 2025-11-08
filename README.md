@@ -20,6 +20,7 @@ A cél egy modern, biztonságos kliens alkalmazás létrehozása, amelyet egy As
 
 - 🔍 **Szűrés, keresés és rendezés** a feladatok között  
 - ⚙️ **Egységes hibakezelés**
+- 🔒 **Feladatok exportálásba xlsx fájlba**
 
 ---
 
