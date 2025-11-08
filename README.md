@@ -1,6 +1,6 @@
 # 🧠 Task Manager Client
 
-Egy **React + Tailwind** alapú alkalmazás, amely felhasználói feladatok kezelésére szolgál, felhasználói regisztrációval, bejelentkezéssel és JWT-alapú authentikációval.  
+Egy **React és Tailwind CSS** alapú webalkalmazás, amely felhasználói feladatok kezelését teszi lehetővé, JWT-alapú hitelesítéssel és biztonságos adatkezeléssel..  
 A cél egy modern, biztonságos kliens alkalmazás létrehozása, amelyet egy Asp.net Web Api backend használ.
 
 ---
@@ -20,7 +20,7 @@ A cél egy modern, biztonságos kliens alkalmazás létrehozása, amelyet egy As
 
 - 🔍 **Szűrés, keresés és rendezés** a feladatok között  
 - ⚙️ **Egységes hibakezelés**
-- 🔒 **Feladatok exportálásba xlsx fájlba**
+- 📤 **Feladatok exportálása** XLSX fájlba
 
 ---
 
@@ -48,7 +48,7 @@ task-manager-frontend/
 ├── src/pages/
 │ ├── Login.jsx -> Bejelentkezés oldala.
 │ ├── Register.jsx -> Regisztráció oldala.
-│ ├── TaskEdit.jsx -> Kiválasztott feladat modósítása.
+│ ├── TaskEdit.jsx -> Kiválasztott feladat módosítása.
 │ ├── TaskForm.jsx -> Új feladat létrehozása.
 │ └── TaskList.jsx -> Főoldal, tartalmazza a felhasználóhoz rendelt feladatokat.
 │
@@ -81,7 +81,7 @@ task-manager-frontend/
 ## 🔑 JWT hitelesítés
 
 A bejelentkezés után a szerver visszaad egy JWT tokent, amelyet a kliens minden kérésnél a headerben küld el:
-``` makefile
+``` http
 Authorization: Bearer <token>
 ```
 ### Példa:
@@ -94,7 +94,7 @@ A token lejárata után a kliens újra bejelentkezésre kényszerül.
 
 ## 🌍 Backend integráció
 
-A frontendhez készült ASP.net Web Api alapú backend is:
+A frontendhez készült ASP.NET Core Web API alapú backend is:
 👉[Task Manager Backend](https://github.com/Riptir3/TaskManager.Api). 
 A két alkalmazás Axios-on keresztül kommunikál, a `https://localhost:7242/api/...` végpontokat használva.
 
@@ -111,7 +111,7 @@ npm install
 ```
 ### 3️⃣ Futtatás
 ```bash
-npm run
+npm start
 ```
 
 ## Kapcsolat
