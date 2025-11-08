@@ -102,28 +102,16 @@ A két alkalmazás Axios-on keresztül kommunikál, a `https://localhost:7242/ap
 
 ### 1️⃣ Klónozd a repót
 ```bash
-git clone https://github.com/Riptir3/TaskManager.Api.git
-cd TaskManager.API
+git clone https://github.com/Riptir3/task-manager-frontend.git
+cd task-manager-frontend
 ```
 ### 2️⃣ Telepítsd a függőségeket
 ```bash
-dotnet build
+npm install
 ```
-### 3️⃣ Adatbázis létrehozása
+### 3️⃣ Futtatás
 ```bash
-dotnet ef database update
-```
-### 4️⃣ Futtatás
-```bash
-dotnet run
-```
-### A backend elérhető lesz itt:
-```arduino
-https://localhost:7242
-```
-### Swagger UI:
-```bash
-https://localhost:7242/swagger
+npm run
 ```
 
 ## Kapcsolat
